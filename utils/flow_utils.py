@@ -59,14 +59,18 @@ def writeFlow(filename,uv,v=None):
 
 # ref: https://github.com/sampepose/flownet2-tf/
 # blob/18f87081db44939414fc4a48834f9e0da3e69f4c/src/flowlib.py#L240
-def visulize_flow_file(flow_filename, save_dir=None):
-	flow_data = readFlow(flow_filename)
+def visulize_flow_file(flow_data,flow_filename, save_dir=None):
+	'''vlad nonsense happened'''
+	#flow_data = readFlow(flow_filename)
 	img = flow2img(flow_data)
-	# plt.imshow(img)
-	# plt.show()
+	
 	if save_dir:
-		idx = flow_filename.rfind("/") + 1
-		plt.imsave(os.path.join(save_dir, "%s-vis.png" % flow_filename[idx:-4]), img)
+		plt.imsave(flow_filename,img)
+		#idx = flow_filename.rfind("/") + 1
+		#plt.imsave(os.path.join(save_dir, "%s-vis.png" % flow_filename[idx:-4]), img)
+	else:
+		plt.imshow(img)
+		plt.show()
 
 
 def flow2img(flow_data):

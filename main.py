@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import pdb
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -14,6 +14,7 @@ from glob import glob
 from os.path import *
 
 import models, losses, datasets
+#import models, losses
 from utils import flow_utils, tools
 
 # fp32 copy of parameters for update
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     parser.add_argument('--fp16', action='store_true', help='Run model in pseudo-fp16 mode (fp16 storage fp32 math).')
     parser.add_argument('--fp16_scale', type=float, default=1024., help='Loss scaling, positive power of 2 values can improve fp16 convergence.')
 
-    tools.add_arguments_for_module(parser, models, argument_for_class='model', default='FlowNet2')
+    tools.add_arguments_for_module(parser, models, argument_for_class='model', default='FlowNet2S')
 
     tools.add_arguments_for_module(parser, losses, argument_for_class='loss', default='L1Loss')
 
@@ -165,6 +166,8 @@ if __name__ == '__main__':
                 super(ModelAndLoss, self).__init__()
                 kwargs = tools.kwargs_from_args(args, 'model')
                 self.model = args.model_class(args, **kwargs)
+                pdb.set_trace()
+                
                 kwargs = tools.kwargs_from_args(args, 'loss')
                 self.loss = args.loss_class(args, **kwargs)
                 
@@ -177,8 +180,9 @@ if __name__ == '__main__':
                     return loss_values
                 else :
                     return loss_values, output
-
+        
         model_and_loss = ModelAndLoss(args)
+        #pdb.set_trace()
 
         block.log('Effective Batch Size: {}'.format(args.effective_batch_size))
         block.log('Number of parameters: {}'.format(sum([p.data.nelement() if p.requires_grad else 0 for p in model_and_loss.parameters()])))
